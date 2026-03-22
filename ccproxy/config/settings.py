@@ -28,6 +28,7 @@ DEFAULT_ENABLED_PLUGINS = [
     "copilot",
     "claude_api",
     "claude_sdk",
+    "claude_passthrough",
     "oauth_codex",
     "oauth_claude",
 ]
