@@ -43,12 +43,40 @@ class ClaudePassthroughRuntime(ProviderPluginRuntime):
 
         self.config = config
 
-        logger.debug(
-            "plugin_initialized",
+        # Log credentials manager status
+        credentials_manager = self.context.get("credentials_manager") if self.context else None
+        has_credentials_manager = credentials_manager is not None
+        credentials_manager_type = type(credentials_manager).__name__ if credentials_manager else None
+
+        # Log token manager if available
+        token_manager = None
+        if credentials_manager and hasattr(credentials_manager, "token_manager"):
+            token_manager = credentials_manager.token_manager
+        token_manager_type = type(token_manager).__name__ if token_manager else None
+
+        # Log authentication status
+        is_authenticated = False
+        if token_manager and hasattr(token_manager, "is_authenticated"):
+            try:
+                is_authenticated = await token_manager.is_authenticated()
+            except Exception as exc:
+                logger.warning(
+                    "claude_passthrough_auth_check_failed",
+                    error=str(exc),
+                    category="auth",
+                )
+
+        logger.info(
+            "claude_passthrough_initialized",
             plugin="claude_passthrough",
             version=self.manifest.version,
             status="initialized",
             base_url=self.config.base_url,
+            has_credentials_manager=has_credentials_manager,
+            credentials_manager_type=credentials_manager_type,
+            token_manager_type=token_manager_type,
+            is_authenticated=is_authenticated,
+            category="plugin",
         )
 
 
