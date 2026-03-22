@@ -62,6 +62,7 @@ class ClaudePassthroughFactory(BaseProviderPluginFactory):
     runtime_class = ClaudePassthroughRuntime
     adapter_class = ClaudePassthroughAdapter
     config_class = ClaudePassthroughSettings
+    auth_manager_name = "oauth_claude"
     routers = [
         RouterSpec(router=passthrough_router, prefix="/anthropic", tags=["anthropic"]),
     ]
