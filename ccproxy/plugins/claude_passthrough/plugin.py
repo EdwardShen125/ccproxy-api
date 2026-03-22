@@ -14,7 +14,7 @@ from ccproxy.core.plugins.declaration import RouterSpec
 from .adapter import ClaudePassthroughAdapter
 from .config import ClaudePassthroughSettings
 from .routes import router as passthrough_router
-
+from ..oauth_claude.manager import ClaudeApiTokenManager
 
 logger = get_plugin_logger()
 
@@ -63,7 +63,7 @@ class ClaudePassthroughFactory(BaseProviderPluginFactory):
     adapter_class = ClaudePassthroughAdapter
     config_class = ClaudePassthroughSettings
     auth_manager_name = "oauth_claude"
-    credentials_manager_class = "ClaudeApiTokenManager"
+    credentials_manager_class = ClaudeApiTokenManager
     routers = [
         RouterSpec(router=passthrough_router, prefix="/anthropic", tags=["anthropic"]),
     ]
